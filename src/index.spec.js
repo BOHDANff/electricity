@@ -167,9 +167,9 @@ describe("Households + Power Plants", function () {
     });
 
     describe('complex network', () => {
-        const getRandomInt = (max = households.length) => {
-            return Math.floor(Math.random() * max);
-        }
+        // const getRandomInt = (max = households.length) => {
+        //     return Math.floor(Math.random() * max);
+        // }
 
         forEach([
             [10],
@@ -177,20 +177,19 @@ describe("Households + Power Plants", function () {
         ]).it('Complex network %d', (size) => {
             const world = new World();
             const households = (new Array(size)).fill(undefined).map(() => world.createHousehold());
-
+            const getRandomInt = (max = households.length) => {
+                return Math.floor(Math.random() * max);
+            }
             const powerPlant1 = world.createPowerPlant();
             const powerPlant2 = world.createPowerPlant();
-
             world.connectHouseholdToPowerPlant(households[getRandomInt()], powerPlant1);
             world.connectHouseholdToPowerPlant(households[getRandomInt()], powerPlant2);
-
             households.forEach((household, index) => {
-                world.connectHouseholdToHousehold(household, households[index === length - 1 ? 0 : index + 1])
+                world.connectHouseholdToHousehold(household, households[index === households.length - 1 ? 0 : index + 1])
             });
 
             world.connectHouseholdToHousehold(households[getRandomInt()], households[getRandomInt()])
             world.connectHouseholdToHousehold(households[getRandomInt()], households[getRandomInt()])
-
 
             assert.equal(world.householdHasEletricity(households[getRandomInt()]), true);
             assert.equal(world.householdHasEletricity(households[getRandomInt()]), true);
